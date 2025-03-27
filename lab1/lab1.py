@@ -36,9 +36,13 @@ output = model(image)
 original_pred = output.max(1, keepdim=True)[1]
 original_confidence = torch.nn.functional.softmax(output, dim=1).max().item() * 100
 
+# Fix: Create a target tensor in the correct format
+target_class = (original_pred.item() + 1) % 1000  # Choose a different class
+target = torch.tensor([target_class])  # Create a 1D tensor with a single value
+
 # Now we're going to make the computer confused about what it sees
 criterion = nn.CrossEntropyLoss()
-loss = criterion(output, original_pred)
+loss = criterion(output, target)  # Use the properly formatted target
 model.zero_grad()
 loss.backward()
 data_grad = image.grad.data
