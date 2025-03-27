@@ -23,6 +23,13 @@ dataset = datasets.ImageFolder(root="images", transform=transform)
 folder_name = dataset.root.split('/')[-1]
 results_filename = f'results_{folder_name}.txt'
 
+# Move this function definition to before the main processing loop
+def fgsm_attack(image, epsilon, data_grad):
+    sign_data_grad = data_grad.sign()
+    perturbed_image = image + epsilon * sign_data_grad
+    perturbed_image = torch.clamp(perturbed_image, 0, 1)
+    return perturbed_image
+
 # Process all images in the dataset
 with open(results_filename, 'w') as f:
     for idx in range(len(dataset)):
@@ -57,7 +64,7 @@ with open(results_filename, 'w') as f:
 
         # Write results for this image
         f.write(f"\nImage {idx + 1}:\n")
-        f.write(f"Original Image:\n")
+        f.write(f"Original Image (from {dataset.imgs[idx][0]}):\n")
         f.write(f"Predicted class: {original_pred.item()} [This is the number that tells us what the computer thinks it sees!]\n")
         f.write(f"Confidence: {original_confidence:.2f}% [This is how sure the computer is about its guess]\n\n")
         f.write(f"Perturbed Image:\n")
@@ -79,10 +86,3 @@ with open(results_filename, 'w') as f:
         # Save the comparison plot with unique name for each image
         plt.savefig(f'comparison_{folder_name}_image_{idx + 1}.png')
         plt.close()  # Close the figure to free memory
-
-# This is like making a sneaky change to our picture that the computer won't notice
-def fgsm_attack(image, epsilon, data_grad):
-    sign_data_grad = data_grad.sign()
-    perturbed_image = image + epsilon * sign_data_grad
-    perturbed_image = torch.clamp(perturbed_image, 0, 1)
-    return perturbed_image
