@@ -33,11 +33,12 @@ def fgsm_attack(image, epsilon, data_grad):
 
 # Let's show our picture to the computer and see what it thinks it is
 output = model(image)
-pred = output.max(1)[1]
+original_pred = output.max(1, keepdim=True)[1]
+original_confidence = torch.nn.functional.softmax(output, dim=1).max().item() * 100
 
 # Now we're going to make the computer confused about what it sees
 criterion = nn.CrossEntropyLoss()
-loss = criterion(output, pred)
+loss = criterion(output, original_pred)
 model.zero_grad()
 loss.backward()
 data_grad = image.grad.data
@@ -46,7 +47,23 @@ data_grad = image.grad.data
 epsilon = 0.1
 perturbed_image = fgsm_attack(image, epsilon, data_grad)
 
+# Get prediction for perturbed image
+perturbed_output = model(perturbed_image)
+perturbed_pred = perturbed_output.max(1, keepdim=True)[1]
+perturbed_confidence = torch.nn.functional.softmax(perturbed_output, dim=1).max().item() * 100
+
+# Save the predictions to a text file
+with open('results.txt', 'w') as f:
+    f.write(f"Original Image:\n")
+    f.write(f"Predicted class: {original_pred.item()} [This is the number that tells us what the computer thinks it sees!]\n")
+    f.write(f"Confidence: {original_confidence:.2f}% [This is how sure the computer is about its guess - like being really really sure or just kind of sure!]\n\n")
+    f.write(f"Perturbed Image:\n")
+    f.write(f"Predicted class: {perturbed_pred.item()} [This is what the computer thinks it sees in our sneaky changed picture!]\n")
+    f.write(f"Confidence: {perturbed_confidence:.2f}% [This shows how sure the computer is about the sneaky picture - we want this to be different!]\n")
+    f.write(f"Epsilon used: {epsilon} [This is like how much we changed the picture - bigger numbers mean bigger changes!]\n")
+
 # Now let's show both pictures side by side - the real one and our sneaky one
+plt.figure(figsize=(10, 5))  # Optional: set a specific figure size
 plt.subplot(1, 2, 1)
 plt.imshow(image.squeeze().permute(1, 2, 0).detach().numpy())
 plt.title("The Real Picture")
@@ -55,4 +72,6 @@ plt.subplot(1, 2, 2)
 plt.imshow(perturbed_image.squeeze().permute(1, 2, 0).detach().numpy())
 plt.title("Our Sneaky Picture")
 
-plt.show()
+# Save the comparison plot
+plt.savefig('comparison.png')
+plt.show()  # Optional: you can still display it too
