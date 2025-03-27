@@ -17,7 +17,7 @@ transform = transforms.Compose([
 ])
 
 # Let's get a picture of a panda to look at
-dataset = datasets.ImageFolder(root="./panda", transform=transform)
+dataset = datasets.ImageFolder(root=".", transform=transform)
 image, label = dataset[0]  # We're just looking at the first picture
 
 # We need to wrap our picture in a special way so the computer can look at it
@@ -33,7 +33,7 @@ def fgsm_attack(image, epsilon, data_grad):
 
 # Let's show our picture to the computer and see what it thinks it is
 output = model(image)
-pred = output.max(1, keepdim=True)[1]
+pred = output.max(1)[1]
 
 # Now we're going to make the computer confused about what it sees
 criterion = nn.CrossEntropyLoss()
