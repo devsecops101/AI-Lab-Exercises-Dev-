@@ -18,7 +18,7 @@ if __name__ == "__main__":
     os.makedirs("logs", exist_ok=True)
 
     # Let's read our computer story book
-    firewall_logs = parse_firewall_log('@firewall_train_log.csv')
+    firewall_logs = parse_firewall_log('./logs/firewall_train_log.csv')
 
     # Now let's save our organized stories in a new book
     if not firewall_logs.empty:

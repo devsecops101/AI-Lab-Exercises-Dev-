@@ -54,15 +54,18 @@ if __name__ == "__main__":
     # Create model directory if it doesn't exist
     os.makedirs("model", exist_ok=True)
 
-    # Load firewall logs
-    logs_df = pd.read_csv('logs/processed_firewall_logs.csv')
+    # Load firewall logs with proper column names
+    column_names = ['timestamp', 'source_ip', 'dest_ip', 'protocol', 'source_port', 'dest_port', 'action']
+    logs_df = pd.read_csv('logs/processed_firewall_logs.csv', names=column_names)
+
+    # Convert action to message format for feature extraction
+    logs_df['message'] = logs_df.apply(lambda row: f"{row['action']} {row['protocol']} connection from {row['source_ip']} to {row['dest_ip']} port {row['dest_port']}", axis=1)
 
     # Extract features
     features_df = extract_features(logs_df)
 
-    # Add label column if it exists in the original data
-    if 'label' in logs_df.columns:
-        features_df['label'] = logs_df['label']
+    # Add label column (1 for DENY, 0 for ALLOW)
+    features_df['label'] = (logs_df['action'] == 'DENY').astype(int)
 
     # Save features
     features_df.to_csv('logs/firewall_features.csv', index=False)
