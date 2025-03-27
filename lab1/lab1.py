@@ -17,7 +17,7 @@ transform = transforms.Compose([
 ])
 
 # Let's get a picture of a panda to look at
-dataset = datasets.ImageFolder(root=".", transform=transform)
+dataset = datasets.ImageFolder(root="panda", transform=transform)
 image, label = dataset[0]  # We're just looking at the first picture
 
 # We need to wrap our picture in a special way so the computer can look at it
