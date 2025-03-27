@@ -17,7 +17,7 @@ transform = transforms.Compose([
 ])
 
 # Let's get a picture of a panda to look at
-dataset = datasets.ImageFolder(root="panda", transform=transform)
+dataset = datasets.ImageFolder(root="images", transform=transform)
 image, label = dataset[0]  # We're just looking at the first picture
 
 # We need to wrap our picture in a special way so the computer can look at it
@@ -56,8 +56,12 @@ perturbed_output = model(perturbed_image)
 perturbed_pred = perturbed_output.max(1, keepdim=True)[1]
 perturbed_confidence = torch.nn.functional.softmax(perturbed_output, dim=1).max().item() * 100
 
-# Save the predictions to a text file
-with open('results.txt', 'w') as f:
+# Get the folder name from the dataset's root path
+folder_name = dataset.root.split('/')[-1]  # This will extract the folder name (e.g., 'class1', 'class2', etc.)
+
+# Save the predictions to a text file with the folder name
+results_filename = f'results_{folder_name}.txt'
+with open(results_filename, 'w') as f:
     f.write(f"Original Image:\n")
     f.write(f"Predicted class: {original_pred.item()} [This is the number that tells us what the computer thinks it sees!]\n")
     f.write(f"Confidence: {original_confidence:.2f}% [This is how sure the computer is about its guess - like being really really sure or just kind of sure!]\n\n")
