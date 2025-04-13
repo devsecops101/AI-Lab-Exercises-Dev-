@@ -1,0 +1,23 @@
+This lab exercise is part of the complete course "AI Security for Cybersecurity Professionals".
+
+https://aisectraining.com/earlybirddiscount
+
+The full course provides comprehensive training on:
+    Adversarial Attacks on AI Models
+    Model Poisoning Simulation
+    Data Privacy in AI
+    Securing AI Models with Differential Privacy
+    Detecting Bias in AI Models
+    AI Model Reverse Engineering
+    Malware Detection with AI
+    AI Model API Security Testing
+
+For access to the complete course, including additional labs, video lectures, and expert guidance, please visit the course platform.
+
+https://aisectraining.com/earlybirddiscount
+
+    _  _  _  _  _  _  _  _  _  _  _  _
+   / \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/ \
+  (  A  I     S  E  C  U  R  I  T  Y  )
+   \_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/
+     \_/\_/\_/\_/\_/\_/\_/\_/\_/\_/\_/
