@@ -69,7 +69,7 @@ def train_model(features_path, model_save_path='model'):
     print(f'\nTest accuracy: {accuracy:.4f}')
 
     # Save our smart brain for later
-    model.save(f'/home/student/labs/lab2/model/detection_model.keras')
+    model.save(f'/home/student/labs/bonus/firewall_and_web/model/detection_model.keras')
 
     # Draw pretty pictures to see how well we learned
     plt.figure(figsize=(12, 4))
@@ -111,5 +111,5 @@ def train_model(features_path, model_save_path='model'):
 
 if __name__ == "__main__":
     print("TensorFlow version:", tf.__version__)
-    model, scaler = train_model('/home/student/labs/lab2/logs/firewall_features.csv')
+    model, scaler = train_model('/home/student/labs/bonus/firewall_and_web/logs/firewall_features.csv')
     print("Model training done, model saved to 'model/detection_model'")
